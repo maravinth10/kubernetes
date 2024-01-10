@@ -1,0 +1,38 @@
+1. Initializes cluster master node:
+
+kubeadm init --apiserver-advertise-address $(hostname -i) --pod-network-cidr 10.0.0.0/16
+
+2.
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+
+3. Initialize cluster networking:
+
+kubectl apply -f https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter.yaml
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+4.join nodes
+
+kubeadm join 192.168.0.8:6443 --token 8o5zfa.lxaezmh3qk1k8kop \
+        --discovery-token-ca-cert-hash sha256:c5a9033ef86dec580db5bac5112857764b054ac5ba6d4fb1cbb70df68dddde80 
+
+
+
+5. (Optional) Create an nginx deployment:
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/website/master/content/en/examples/application/nginx-app.yaml
+
+
+
+
