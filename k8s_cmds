@@ -6,7 +6,7 @@ kubectl get nodes
 kubectl get services
 
 kubectl describe pod
-kubectl describe nodes
+kubectl describe nodes node2
 
 
 kubectl edit deploy my-nginx
